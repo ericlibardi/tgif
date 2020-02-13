@@ -53,8 +53,8 @@ var dataHouse = {
                   "state": "LA",
                   "district": "5",
                   "at_large": false,
-                  "geoid": "2205"
-                  ,"missed_votes_pct": 35.06,
+                  "geoid": "2205",
+                  "missed_votes_pct": 35.06,
                   "votes_with_party_pct": 94.48,
                   "votes_against_party_pct": 5.31
                 },
@@ -101,8 +101,8 @@ var dataHouse = {
                   "state": "NC",
                   "district": "12",
                   "at_large": false,
-                  "geoid": "3712"
-                  ,"missed_votes_pct": 1.77,
+                  "geoid": "3712",
+                  "missed_votes_pct": 1.77,
                   "votes_with_party_pct": 99.03,
                   "votes_against_party_pct": 0.84
                 },

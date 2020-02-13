@@ -2,42 +2,70 @@
 //shortcut
 var listMembers = dataSenate.results[0].members
 
-
-for (i=0; i<listMembers.length; i++) {
-    var element = document.getElementById("senate-data");
+function finalTable(array){
+for (i=0; i<array.length; i++) {
+    
     var para = document.createElement("tr");
-    var linkElem = document.createElement("a")
-
-    element.appendChild(para);
+    document.getElementById("senate-data").appendChild(para);
     
-
-    if (listMembers[i].middle_name === null) {
-        var name = listMembers[i].last_name + ", " + listMembers[i].first_name
+    if (array[i].middle_name === null) {
+        var name = array[i].last_name + ", " + array[i].first_name
     } else {
-        var name = listMembers[i].last_name + ", " + listMembers[i].first_name + " " + listMembers[i].middle_name;
+        var name = array[i].last_name + ", " + array[i].first_name + " " + array[i].middle_name;
     }
-    para.insertCell().innerHTML = '<a href="' + listMembers[i].url + '" target=_blank>' + name + '</a>'       
-
-
-    var partyCand = listMembers[i].party.split("");
-    para.insertCell().innerHTML = partyCand[0]
-
-    var candState = listMembers[i].state;
-    para.insertCell().innerHTML = candState
+    para.insertCell().innerHTML = '<a href="' + array[i].url + '" target=_blank>' + name + '</a>'       
+    para.insertCell().innerHTML = array[i].party.split("")[0]
+    para.insertCell().innerHTML = array[i].state
     
-    if (listMembers[i].seniority == 0 || listMembers[i].seniority == 1) {
-        var candSeniority = listMembers[i].seniority + " year"
+    if (array[i].seniority == 0 || array[i].seniority == 1) {
+        para.insertCell().innerHTML = array[i].seniority + " year"
     } else {
-        var candSeniority = listMembers[i].seniority + " years"
+        para.insertCell().innerHTML = array[i].seniority + " years"
     }
-    para.insertCell().innerHTML = candSeniority;
+    para.insertCell().innerHTML = array[i].votes_with_party_pct + " %"
+}}
 
-    var candVotes = listMembers[i].votes_with_party_pct + " %"
-    para.insertCell().innerHTML = candVotes
+function load() { 
+    Array.from(document.querySelectorAll('input[name="parties"]')).forEach(element=>{
+    element.addEventListener("click", ()=>filterParty(listMembers))
+    })  
+    document.getElementById("selectState").addEventListener("change", ()=>filterParty(listMembers) )
+}
+load()
+finalTable(listMembers)
+function filterParty(array) {
+    var e = document.getElementById("selectState").value
+    var tableBody = document.getElementById("senate-data")
+    tableBody.innerHTML = ""
+    var result = Array.from(document.querySelectorAll('input[name="parties"]:checked'))
+    .map(myChoice=> {return myChoice.value} )
+    //console.log(result)
+    if (result.length > 0 && e == "All") {
+        var filterArray = array.filter(table2=> result.includes(table2.party))
+        console.log(filterArray)
+    finalTable(filterArray)
+    }
+    if(result.length == 0 && e == "All"){
+    finalTable(listMembers)
+    }
+    if (result.length == 0 && e !== "All") {
+        var filterArray = array.filter(table2=> e.includes(table2.state))
+    finalTable(filterArray)
+    }
+    if (result.length > 0 && e !== "All"){
+        var filterArray = array.filter(table2=> e.includes(table2.state) && result.includes(table2.party))
+    finalTable(filterArray)
+    }
+}
+function estate(array) {
+    var test = []
+    array.forEach(element=>{
+    test.push(element.state)
+        })
+    var final = test.filter((item, index)=>test.indexOf(item)== index).sort()
+    return final
 }
 
-//document.getElementById("senate-data")
-
-var checkLeng = listMembers.length
-
-console.log(checkLeng)
+estate(listMembers).forEach(element=>{
+    document.getElementById("selectState").appendChild(document.createElement("option")).innerHTML = element
+})

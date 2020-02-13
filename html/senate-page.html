@@ -16,24 +16,45 @@
                 <a href="mailto:info@tgif.net"><u>info@tgif.net</u></a>
             </div>
         </div>
-        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-dark">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                  <a class="nav-link text-light font-weight-bold" href="home-page.html">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item dropdown active ">
-                  <a class="nav-link dropdown-toggle text-light font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Congress 113
-                  </a>
-                  <div class="dropdown-menu bg-secondary" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item text-light font-weight-bold" href="senate-page.html">Senate</a>
-                    <a class="dropdown-item text-light font-weight-bold" href="house-page.html">House</a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </nav>
+        <nav class="navbar navbar-expand-sm sticky-top navbar-light bg-dark">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link text-light font-weight-bold" href="home-page.html">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-light font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Congress 113
+                </a>
+                <div class="dropdown-menu bg-secondary" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item text-light font-weight-bold" href="senate-page.html">Senate</a>
+                  <a class="dropdown-item text-light font-weight-bold" href="house-page.html">House</a>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-light font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Attendance
+                </a>
+                <div class="dropdown-menu bg-secondary" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item text-light font-weight-bold" href="senate-attendance.html">Senate</a>
+                  <a class="dropdown-item text-light font-weight-bold" href="house-attendance.html">House</a>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-light font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Party Loyalty
+                </a>
+                <div class="dropdown-menu bg-secondary" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item text-light font-weight-bold" href="senate-party-loyalty.html">Senate</a>
+                  <a class="dropdown-item text-light font-weight-bold" href="house-party-loyalty.html">House</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
 
         <div class="mt-5 mx-4">
             <div class="mb-5">
@@ -41,6 +62,24 @@
                 <p style="max-width: 800px; text-indent: 30px;">First convened in 1789, the composition and powers of the Senate are established in Article One of the U.S. Constitution. Each state is represented by two senators, regardless of population, who serve staggered six-year terms. The Senate has several exclusive powers not granted to the House, including consenting to treaties as a precondition to their ratification and consenting to or confirming appointments of Cabinet secretaries, federal judges, other federal executive officials, military officers, regulatory officials, ambassadors, and other federal uniformed officers, as well as trial of federal officials impeached by the House.</p>
             </div>
             <div>
+              <div class="d-flex justify-content-between">
+              <form>
+                <label>
+                Filter by Party:
+                  <input id="repCan" type="checkbox" name="parties" value="R"> Republican
+                  <input id="demCan" type="checkbox" name="parties" value="D"> Democrat
+                  <input id="indCan" type="checkbox" name="parties" value="ID"> Independent
+                </label>
+              </form>
+              <form>
+                <label>Filter for State:</label>
+                <select id=selectState name="state">
+                  
+                  <option>All</option>
+                  
+                </select>
+              </form>
+              </div>
                 <table class="table table-striped table-bordered">
                     <thead class="thead-light text-center">
                         <tr>

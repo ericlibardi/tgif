@@ -9,7 +9,7 @@ var statistics = {
     "leastEngaged": ""
 }
 
-var shortSenate = dataSenate.results[0].members
+var shortHouse = dataHouse.results[0].members
 
 function fillArray (array , canParty) {
     var resultArray = [];
@@ -33,51 +33,49 @@ function test (array, canParty) {
 function votesPer (array, canParty) {
     var test = [];
     for (i=0; i<array.length; i++){
-        if (array[i].party===canParty) {
+        if (array[i].party===canParty && array[i].votes_with_party_pct!==undefined) {
             test.push(array[i].votes_with_party_pct)
         }
-        
     }
-    
     return (test.reduce((a,b)=>a+b) / test.length).toFixed(2)
-    
-} 
+}
 
-var votesPerCan = [votesPer(shortSenate, "R"), votesPer(shortSenate, "D"), votesPer(shortSenate, "ID")]
+var votesPerCan = [votesPer(shortHouse, "R"), votesPer(shortHouse, "D"), votesPer(shortHouse, "I")]
 
-//console.log(votesPerCan)
-
-//console.log(votesPer(shortSenate, "D"))
-//console.log(votesPer(shortSenate, "R"))
-//console.log(votesPer(shortSenate, "ID"))
+//console.log(votesPer(shortHouse, "D"))
+//console.log(votesPer(shortHouse, "R"))
+//console.log(votesPer(shortHouse, "I"))
 
 function votesTotal (array) {
     var result = 0;
     array.forEach(element=>{
-        result = result + Number(element.votes_with_party_pct);
+        if(element.votes_with_party_pct !== undefined) {
+        result = result + Number(element.votes_with_party_pct);}
     })
     var total = (result/array.length).toFixed(2)
     return total;
 }
+//console.log(votesTotal(shortHouse))
+
 
 for (i=0; i<4; i++) {
     var partyCan = ["Republican", "Democrat", "Independent", "Total"];
-    var partyNom = ["R", "D", "ID"]
-    var fromElem = document.getElementById("tableSenate");
+    var partyNom = ["R", "D", "I"]
+    var fromElem = document.getElementById("tableHouse");
     var para = document.createElement("tr");
 
     fromElem.appendChild(para);
 
     para.insertCell().innerHTML = partyCan[i]
     if (i<3) {
-        para.insertCell().innerHTML = test(shortSenate, partyNom[i]);
+        para.insertCell().innerHTML = test(shortHouse, partyNom[i]);
     } else {
-        para.insertCell().innerHTML = shortSenate.length;
+        para.insertCell().innerHTML = shortHouse.length;
     }
     if (i<3) {
         para.insertCell().innerHTML = votesPerCan[i] + "%";
     } else {
-        para.insertCell().innerHTML = votesTotal(shortSenate) + "%"
+        para.insertCell().innerHTML = votesTotal(shortHouse) + "%"
         }
 }
 
@@ -87,11 +85,11 @@ function leastEng (array) {
         
         test.push(array[i].missed_votes_pct)
     }
-
+    
     var percent = Math.floor(test.length/100*10)
     var x = test.sort((a,b)=> b - a).slice(0, percent)
     var minEngag = Math.min.apply(null, x)
-
+    
     /*for (i=0; i < array.length; i++) {
         if(array[i].missed_votes_pct >= minEngag){
             var para = document.createElement("tr");
@@ -122,8 +120,8 @@ function leastEng (array) {
     
 
 }
-    
-console.log(leastEng(shortSenate))
+
+console.log(leastEng(shortHouse))
 
 function mostEngaged (array) {
     var test = []
@@ -133,7 +131,7 @@ function mostEngaged (array) {
     var percent = Math.floor(array.length/100*10)
     var x = test.sort((a, b)=> a - b).slice(0, percent)
     var maxEng = Math.max.apply(null, x)
-
+    
     array.forEach(element=>{
         if (element.missed_votes_pct <= maxEng){
             var para = document.createElement("tr");
@@ -153,8 +151,8 @@ function mostEngaged (array) {
 
 
     })
-    console.log(test)
+    
     return maxEng
 }
 
-console.log(mostEngaged(shortSenate))
+console.log(mostEngaged(shortHouse))

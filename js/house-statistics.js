@@ -1,50 +1,33 @@
-var statistics = {
-    "numOfReps": "",
-    "numOfDem": "",
-    "numOfInd": "",
-    "total": "",
-    "mostLoyal": "",
-    "leastLoyal": "",
-    "mostEngaged": "",
-    "leastEngaged": ""
+function responseJson() {
+    fetch('https://api.propublica.org/congress/v1/116/house/members.json', {
+    method: "GET",
+    headers: {
+    "X-API-Key": "p81O1eNhl3Vq1wXCM01cXtMqzJoLktDn8rtymMRi"
+    },
+    mode: 'cors',
+    cache: 'default'    
+})
+  .then(resp=>resp.json())
+  .then(respons=> { 
+    var listMemb = respons.results[0].members
+    spinner()
+    votesTotal(listMemb);
+    firstTable(listMemb);
+    leastEng(listMemb)
+    mostEngaged(listMemb)
+  })  
+  .catch(err=> console.log(err))
+
 }
 
-var shortHouse = dataHouse.results[0].members
+responseJson()
 
-function fillArray (array , canParty) {
-    var resultArray = [];
-for (i=0; i<array.length; i++) {
-    if (array[i].party===canParty) {
-        resultArray.push(array[i]);
-    } 
-}
-    return resultArray.length;
-}
-
-function test (array, canParty) {
-    return array.filter (senator=>senator.party===canParty).length
-}
-
-//console.log(test(shortSenate, "D"))
-//console.log(test(shortSenate, "R"))
-//console.log(test(shortSenate, "ID"))
-
-
-function votesPer (array, canParty) {
-    var test = [];
-    for (i=0; i<array.length; i++){
-        if (array[i].party===canParty && array[i].votes_with_party_pct!==undefined) {
-            test.push(array[i].votes_with_party_pct)
-        }
+function spinner (){
+    var test = Array.from(document.getElementsByClassName("spinner-border"))
+    test.forEach(element=> {
+        element.className = "d-none"
+    })
     }
-    return (test.reduce((a,b)=>a+b) / test.length).toFixed(2)
-}
-
-var votesPerCan = [votesPer(shortHouse, "R"), votesPer(shortHouse, "D"), votesPer(shortHouse, "I")]
-
-//console.log(votesPer(shortHouse, "D"))
-//console.log(votesPer(shortHouse, "R"))
-//console.log(votesPer(shortHouse, "I"))
 
 function votesTotal (array) {
     var result = 0;
@@ -55,29 +38,42 @@ function votesTotal (array) {
     var total = (result/array.length).toFixed(2)
     return total;
 }
-//console.log(votesTotal(shortHouse))
 
-
+function firstTable(array) {
+    function votesPer (array, canParty) {
+        var test = [];
+        
+        for (i=0; i<array.length; i++){
+            if (array[i].party===canParty && array[i].votes_with_party_pct!==undefined) {
+                test.push(array[i].votes_with_party_pct)
+            }
+        }
+        return (test.reduce((a,b)=>a+b) / test.length).toFixed(2)
+    }
+    var votesPerCan = [votesPer(array, "R"), votesPer(array, "D"), votesPer(array, "I")]
 for (i=0; i<4; i++) {
     var partyCan = ["Republican", "Democrat", "Independent", "Total"];
     var partyNom = ["R", "D", "I"]
     var fromElem = document.getElementById("tableHouse");
     var para = document.createElement("tr");
-
+    
+    function test (array, canParty) {
+        return array.filter (senator=>senator.party===canParty).length
+    }
     fromElem.appendChild(para);
 
     para.insertCell().innerHTML = partyCan[i]
     if (i<3) {
-        para.insertCell().innerHTML = test(shortHouse, partyNom[i]);
+        para.insertCell().innerHTML = test(array, partyNom[i]);
     } else {
-        para.insertCell().innerHTML = shortHouse.length;
+        para.insertCell().innerHTML = array.length;
     }
     if (i<3) {
         para.insertCell().innerHTML = votesPerCan[i] + "%";
     } else {
-        para.insertCell().innerHTML = votesTotal(shortHouse) + "%"
+        para.insertCell().innerHTML = votesTotal(array) + "%"
         }
-}
+}}
 
 function leastEng (array) {
     var test = []
@@ -117,11 +113,7 @@ function leastEng (array) {
             lessEng.appendChild(para)
 
     } })
-    
-
 }
-
-console.log(leastEng(shortHouse))
 
 function mostEngaged (array) {
     var test = []
@@ -148,11 +140,6 @@ function mostEngaged (array) {
             para.insertCell().innerHTML = element.missed_votes_pct.toFixed(2) + "%";
             
         }
-
-
-    })
-    
+    })   
     return maxEng
 }
-
-console.log(mostEngaged(shortHouse))

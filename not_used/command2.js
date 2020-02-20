@@ -1,4 +1,34 @@
-var shortcutHouse = dataHouse.results[0].members
+function responseJson () {
+    fetch ('https://api.propublica.org/congress/v1/116/house/members.json', {
+    method: "GET",
+    headers: {
+        "X-API-Key": "p81O1eNhl3Vq1wXCM01cXtMqzJoLktDn8rtymMRi"
+    },
+    mode: 'cors',
+    cache: 'default'
+    })
+    .then (resp =>resp.json())
+    .then (result => {
+        var members = result.results[0].members
+        spinner()
+        finalTable(members);
+        load(members);
+        filterParty(members);
+        estate(members);
+        formEstate(members);
+    })
+    .catch (err=> console.log(err)) 
+}
+responseJson()
+
+function spinner (){
+    var test = Array.from(document.getElementsByClassName("spinner-border"))
+    test.forEach(element=> {
+        element.className = "d-none"
+    })
+    }
+
+//var shortcutHouse = dataHouse.results[0].members
 
 function finalTable (array) {
 for (i=0; i<array.length; i++) {
@@ -9,7 +39,7 @@ for (i=0; i<array.length; i++) {
      if (array[i].middle_name === null) {
          var nameHouse = array[i].last_name + ", " + array[i].first_name
      } else {
-        var nameHouse = array[i].last_name + ", " + array[i].first_name + " " + shortcutHouse[i].middle_name 
+        var nameHouse = array[i].last_name + ", " + array[i].first_name + " " + array[i].middle_name 
      }
      para.insertCell().innerHTML = '<a href="' + array[i].url + '" target=_blank>' + nameHouse + '</a>'
     
@@ -26,14 +56,14 @@ for (i=0; i<array.length; i++) {
      para.insertCell().innerHTML = array[i].votes_with_party_pct + "%";
 }}
 
-function load() { 
+function load(array) { 
     Array.from(document.querySelectorAll('input[name="parties"]')).forEach(element=>{
-    element.addEventListener("click", ()=>filterParty(shortcutHouse))
+    element.addEventListener("click", ()=>filterParty(array))
     })
-    document.getElementById("selectState").addEventListener("change", ()=>filterParty(shortcutHouse) )
+    document.getElementById("selectState").addEventListener("change", ()=>filterParty(array) )
 }
-load()
-finalTable(shortcutHouse)
+//load()
+//finalTable(shortcutHouse)
 
 
 function filterParty(array) {
@@ -49,7 +79,7 @@ function filterParty(array) {
     finalTable(filterArray)
     }
     if(result.length == 0 && e == "All"){
-    finalTable(shortcutHouse)
+    finalTable(array)
     }
     if (result.length == 0 && e !== "All") {
         var filterArray = array.filter(table2=> e.includes(table2.state))
@@ -70,6 +100,7 @@ function estate (array) {
     return final
 }
 
-estate(shortcutHouse).forEach(element=>{
+function formEstate (array) {
+estate(array).forEach(element=>{
     document.getElementById("selectState").appendChild(document.createElement("option")).innerHTML = element;
-})
+})}

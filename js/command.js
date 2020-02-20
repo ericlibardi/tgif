@@ -1,12 +1,65 @@
+function responseJson (){
+
+    if(document.getElementById("test").innerHTML == "Senators") {
+    fetch('https://api.propublica.org/congress/v1/116/senate/members.json', {
+    method: "GET",
+    headers: {
+        "X-API-Key": "p81O1eNhl3Vq1wXCM01cXtMqzJoLktDn8rtymMRi"
+    },
+    mode: 'cors',
+    cache: 'default'
+    })
+    .then(resp=>resp.json())
+    .then(result=> {
+        var members = result.results[0].members
+        spinner()
+        finalTable(members);
+        filterParty(members);
+        estate(members);
+        formEstate(members);
+        load(members)
+    })
+    .catch(err=> console.log(err)) 
+} else if (document.getElementById("test").innerHTML == "Congressmen") {
+    fetch ('https://api.propublica.org/congress/v1/116/house/members.json', {
+    method: "GET",
+    headers: {
+        "X-API-Key": "p81O1eNhl3Vq1wXCM01cXtMqzJoLktDn8rtymMRi"
+    },
+    mode: 'cors',
+    cache: 'default'
+    })
+    .then (resp =>resp.json())
+    .then (result => {
+        var members = result.results[0].members
+        spinner()
+        finalTable(members);
+        load(members);
+        filterParty(members);
+        estate(members);
+        formEstate(members);
+    })
+    .catch (err=> console.log(err)) 
+}
+}
+
+responseJson()
+
+function spinner (){
+    var test = Array.from(document.getElementsByClassName("spinner-border"))
+    test.forEach(element=> {
+        element.className = "d-none"
+    })
+    }
 
 //shortcut
-var listMembers = dataSenate.results[0].members
+//var listMembers = dataSenate.results[0].members
 
 function finalTable(array){
 for (i=0; i<array.length; i++) {
     
     var para = document.createElement("tr");
-    document.getElementById("senate-data").appendChild(para);
+    document.getElementById("tableData").appendChild(para);
     
     if (array[i].middle_name === null) {
         var name = array[i].last_name + ", " + array[i].first_name
@@ -25,17 +78,17 @@ for (i=0; i<array.length; i++) {
     para.insertCell().innerHTML = array[i].votes_with_party_pct + " %"
 }}
 
-function load() { 
+function load(array) { 
     Array.from(document.querySelectorAll('input[name="parties"]')).forEach(element=>{
-    element.addEventListener("click", ()=>filterParty(listMembers))
+    element.addEventListener("click", ()=>filterParty(array))
     })  
-    document.getElementById("selectState").addEventListener("change", ()=>filterParty(listMembers) )
+    document.getElementById("selectState").addEventListener("change", ()=>filterParty(array) )
 }
-load()
-finalTable(listMembers)
+//load()
+//finalTable(listMembers)
 function filterParty(array) {
     var e = document.getElementById("selectState").value
-    var tableBody = document.getElementById("senate-data")
+    var tableBody = document.getElementById("tableData")
     tableBody.innerHTML = ""
     var result = Array.from(document.querySelectorAll('input[name="parties"]:checked'))
     .map(myChoice=> {return myChoice.value} )
@@ -46,7 +99,7 @@ function filterParty(array) {
     finalTable(filterArray)
     }
     if(result.length == 0 && e == "All"){
-    finalTable(listMembers)
+    finalTable(array)
     }
     if (result.length == 0 && e !== "All") {
         var filterArray = array.filter(table2=> e.includes(table2.state))
@@ -66,6 +119,11 @@ function estate(array) {
     return final
 }
 
-estate(listMembers).forEach(element=>{
+function formEstate(array) {
+estate(array).forEach(element=>{
     document.getElementById("selectState").appendChild(document.createElement("option")).innerHTML = element
-})
+})}
+
+
+var check = document.getElementById("test").innerHTML
+console.log(check)

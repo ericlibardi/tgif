@@ -54,7 +54,7 @@ function firstTable(array) {
 for (i=0; i<4; i++) {
     var partyCan = ["Republican", "Democrat", "Independent", "Total"];
     var partyNom = ["R", "D", "I"]
-    var fromElem = document.getElementById("tableHouse");
+    var fromElem = document.getElementById("tableData");
     var para = document.createElement("tr");
     
     function test (array, canParty) {
